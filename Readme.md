@@ -10,6 +10,7 @@ ___
 * Crypografia da senha;
 * Sistema de Login;
 * Sistema de Posts.
+* Sistema de filtragem
 
 ___
 
@@ -28,5 +29,5 @@ ___
 ___
 
 <div align="center">
-    <p>Projeto ainda em contrução 🪐🔥</p>
+    <p>Projeto ainda em construção 🪐🔥</p>
 </div>
