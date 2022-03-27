@@ -1,10 +1,42 @@
 const Tought = require('../models/Tought')
 const User = require("../models/User")
 
+const { Op } = require('sequelize') //Sistema de busca "Nomes parecidos"
+
 module.exports = class ToughtController {
     
     static async showToughts(req, res) {
-        res.render('toughts/home')
+        let search = ''
+
+        if (req.query.search){ //Se enviou algo pela url do method get
+            search = req.query.search //O search vai receber esse valor
+        }
+
+        let order = 'DESC'
+
+        if(req.query.order === 'old'){
+            order = 'ASC'
+        } else {
+            order = "DESC"
+        }
+
+        const toughtsData = await Tought.findAll({
+            include: User,
+            where: {
+                title: {[Op.like]: `%${search}%`} //Filtrar o titulo com o Op: %% -> Indica coringa, ou seja vale tudo e antes  
+            },
+            order: [['createdAt', order]] //createAt para buscar pela order de , order
+        })
+
+        const toughts = toughtsData.map(result => result.get({plain: true}))
+
+        let toughtsQty = toughts.length
+
+        if(toughtsQty === 0){
+            toughtsQty = false
+        }
+
+        res.render('toughts/home', {toughts, search, toughtsQty})
     }
 
     static async dashboard(req, res){
